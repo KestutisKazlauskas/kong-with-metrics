@@ -1,0 +1,11 @@
+# IntelliJ IDEA project files
+.idea/
+*.iml
+*.iws
+out/
+
+# Terraform state files
+*.tfstate
+*.tfstate.*
+.terraform/
+crash.log

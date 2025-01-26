@@ -1,0 +1,9 @@
+---
+global:
+  image:
+    tag: "v2.13.3"
+
+# Probably not production level only for local development
+server:
+  extraArgs:
+    - --insecure

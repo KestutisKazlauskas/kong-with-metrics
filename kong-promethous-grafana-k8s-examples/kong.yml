@@ -1,0 +1,14 @@
+admin:
+  useTLS: false     # Metrics for Prometheus are available
+readinessProbe:     # on the Admin API. By default, Prometheus
+  httpGet:          # scrapes are HTTP and not HTTPS.
+    scheme: HTTP    # Admin API should be on TLS in production.
+livenessProbe:
+  httpGet:
+    scheme: HTTP
+ingressController:  # enable Kong as an Ingress controller
+  enabled: true
+podAnnotations:
+  prometheus.io/scrape: "true" # Ask Prometheus to scrape the
+  prometheus.io/port: "8100"   # Kong pods for metrics
+

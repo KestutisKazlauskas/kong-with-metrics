@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sample-ingresses
+  annotations:
+    konghq.com/strip-path: 'true'
+spec:
+  ingressClassName: kong
+  rules:
+    - http:
+        paths:
+          - path: /billing
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: billing
+                port:
+                  number: 80
+          - path: /comments
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: comments
+                port:
+                  number: 80
+          - path: /invoice
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: invoice
+                port:
+                  number: 80

@@ -1,0 +1,58 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mongodb-secret
+type: Opaque
+data:
+  MONGODB_USER: <base64-encoded-username>
+  MONGODB_PASS: <base64-encoded-password>
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-events-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-events-api
+  template:
+    metadata:
+      labels:
+        app: go-events-api
+    spec:
+      containers:
+      - name: go-events-api
+        image: your-docker-repo/go-events-api:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: MONGODB_URI
+          value: "mongodb://your-mongodb-host:27017"
+        - name: MONGODB_USER
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret
+              key: MONGODB_USER
+        - name: MONGODB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret
+              key: MONGODB_PASS
+---
+# TODO maybe we do not need this service
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-events-api
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: go-events-api
