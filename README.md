@@ -12,11 +12,23 @@ cd terraform
 terraform init
 terraform apply
 ```
+- Run initial argoCd application when terraform finished the deployment
 ```bash
 kubectl apply -f argocd-intial-app/application.yaml
 ```
+- Update the secret and apply it for argoCd image updater if you use it
+```bash
+kubectl apply -f argocd-image-updater/secret.yaml
+```
 
-Now you could change the deployment in the https://github.com/KestutisKazlauskas/kong-with-metrics-deployment and argo will redeploy tha application.
+- Expose argocd UI for your localhost
+```bash
+kubectl port-forward -n argocd svc/argocd-server 8888:80
+```
+- Get argocd passord:
+```bash
+echo $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
+```
 
 ## TODO
 - [ ] Deploy go api (add container to image repo, add deployment to argo as api deployment for kong)
